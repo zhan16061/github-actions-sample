@@ -1,0 +1,52 @@
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "*"
+    tags:
+      - "*"
+jobs:
+  job1:
+    env:
+       # refs/tags/v: tag v 開頭是 production
+      ENVIORMENT: ${{ startsWith(github.ref, 'refs/tags/v') && 'production' || 'staging' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello # name：A name for your step to display on GitHub.
+        run: |
+          echo "Hello"
+          echo "$ENVIORMENT"
+
+      - name: Try to fail (continue-on-error)
+        id: continue_on_error # id： 可給可不給，不給的話無法在 context 中取得
+        continue-on-error: true
+        run: exit 1
+
+      - name: Try to fail
+        id: no_continue_on_error # id： 可給可不給，不給的話無法在 context 中取得
+        continue-on-error: true
+        run: exit 1
+
+      - name: Say world
+        run: echo "World"
+
+      - name: print_steps_result
+        run: |
+          echo "steps.continue_on_error.conclusion ${{steps.continue_on_error.conclusion}}"
+          echo "steps.continue_on_error.outcome ${{steps.continue_on_error.outcome}}"
+          
+          echo "steps.no_continue_on_error.conclusion ${{steps.no_continue_on_error.conclusion}}"
+          echo "steps.no_continue_on_error.outcome ${{steps.no_continue_on_error.outcome}}"
+
+      - name: successed
+        if: ${{ !failure() }}
+        uses: snow-actions/line-notify@v1.1.0
+        with:
+          access_token: "${{ secrets.LINE_ACCESS_TOKEN }}"
+          message: |
+            successed:
+            github.ref_name: ${{ github.ref_name }}
+            commit message-1: ${{ github.event.commits[0].message }}
+            commit message-2: ${{ github.event.head_commit.message }}
