@@ -18,6 +18,7 @@ jobs:
         run: |
           echo "Hello"
           echo "$ENVIORMENT"
+          echo "${{env.ENVIORMENT}}"
 
       - name: Say world # 這個步驟會執行，因為前面的步驟有 continue-on-error: true
         run: echo "World"
@@ -35,4 +36,4 @@ jobs:
             github.ref_name: ${{ github.ref_name }}
             commit message-1: ${{ github.event.commits[0].message }}
             commit message-2: ${{ github.event.head_commit.message }}
-            short commit sha ${GITHUB_SHA::7}
+            short commit sha ${{ github.sha }}
