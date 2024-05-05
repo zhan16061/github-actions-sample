@@ -45,6 +45,9 @@ jobs:
         uses: snow-actions/line-notify@v1.1.0
         with:
           access_token: "${{ secrets.LINE_ACCESS_TOKEN }}"
+          # tag push event 時，commit message-1 沒有東西，只有 message-2 有資訊，而且連同 commit description 一起顯示
+          # commit push event 時，message-1 和 message-1 都有資訊，而且連同 commit description 一起顯示
+          # 可以參考 commit_push.png 和 tag_push.png
           message: |
             successed:
             github.ref_name: ${{ github.ref_name }}
