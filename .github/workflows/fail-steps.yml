@@ -9,15 +9,11 @@ on:
       - "*"
 jobs:
   job1:
-    env:
-       # refs/tags/v: tag v 開頭是 production
-      ENVIORMENT: ${{ startsWith(github.ref, 'refs/tags/v') && 'production' || 'staging' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Say hello # name：A name for your step to display on GitHub.
+      - name: Say hello
         run: |
           echo "Hello"
-          echo "$ENVIORMENT"
 
       - name: Try to fail (continue-on-error)
         id: continue_on_error # id： 可給可不給，不給的話無法在 context 中取得
